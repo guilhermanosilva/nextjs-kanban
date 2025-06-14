@@ -1,6 +1,7 @@
-import type { Metadata } from "next"
-import { Roboto, Roboto_Mono } from "next/font/google"
-import "./globals.css"
+import type { Metadata } from "next";
+import { Roboto, Roboto_Mono } from "next/font/google";
+import { Toaster } from "sonner";
+import "./globals.css";
 
 const RobotoSans = Roboto({
   variable: "--font-roboto-sans",
@@ -24,10 +25,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="pt-BR">
-      <body
-        className={`${RobotoSans.variable} ${RobotoMono.variable} antialiased`}
-      >
+      <body className={`${RobotoSans.variable} ${RobotoMono.variable} antialiased`}>
         {children}
+        <Toaster richColors theme="light" />
       </body>
     </html>
   );
