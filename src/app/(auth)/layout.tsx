@@ -1,4 +1,5 @@
 import { BlocksIcon } from "lucide-react";
+import { Toaster } from "sonner";
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -8,6 +9,8 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
       <div className="w-1/2 h-full hidden bg-primary xl:flex items-center justify-center">
         <BlocksIcon size={145} className="-rotate-45 opacity-50 text-white" />
       </div>
+
+      <Toaster richColors theme="light" />
     </section>
   );
 }

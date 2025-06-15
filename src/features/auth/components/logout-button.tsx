@@ -5,7 +5,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { logout } from "@/features/auth/actions/auth-actions";
-import { Loader2Icon } from "lucide-react";
+import { Spinner } from "@/components/spinner";
 
 export function LogoutButton() {
   const [isPending, startTransition] = useTransition();
@@ -22,7 +22,7 @@ export function LogoutButton() {
 
   return (
     <Button variant="ghost" onClick={handleLogout} disabled={isPending} className="w-14">
-      {isPending ? <Loader2Icon className="animate-spin" /> : "Sair"}
+      {isPending ? <Spinner /> : "Sair"}
     </Button>
   );
 }
