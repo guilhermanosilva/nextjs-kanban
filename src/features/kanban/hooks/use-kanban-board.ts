@@ -13,12 +13,20 @@ export function useKanbanBoard(stages: Stage[], cards: Card[]) {
   const [mounted, setMounted] = useState(false);
   const [activeStage, setActiveStage] = useState<Stage | null>(null);
   const [activeCard, setActiveCard] = useState<Card | null>(null);
-  const [orderedStages, setOrderedStages] = useState<Stage[]>(stages ?? []);
-  const [orderedCards, setOrderedCards] = useState<Card[]>(cards ?? []);
+  const [orderedStages, setOrderedStages] = useState<Stage[]>([]);
+  const [orderedCards, setOrderedCards] = useState<Card[]>([]);
 
-  const originalCardsRef = useRef<Card[]>(cards ?? []);
+  const originalCardsRef = useRef<Card[]>([]);
 
   const stagesIds = useMemo(() => orderedStages.map((stage) => stage.id), [orderedStages]);
+  useEffect(() => {
+    setOrderedStages(stages);
+  }, [stages]);
+
+  useEffect(() => {
+    setOrderedCards(cards);
+    originalCardsRef.current = cards;
+  }, [cards]);
 
   useEffect(() => {
     setMounted(true);

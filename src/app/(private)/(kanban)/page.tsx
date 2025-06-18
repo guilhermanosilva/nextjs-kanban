@@ -13,10 +13,8 @@ export default async function KanbanPage() {
   }
 
   return (
-    data.length > 0 && (
-      <div className="flex flex-1 flex-col gap-4">
-        <KanbanBoard stages={data} cards={cards} />
-      </div>
-    )
+    <div className="flex flex-1 flex-col gap-4">
+      <KanbanBoard stages={data} cards={cards} />
+    </div>
   );
 }

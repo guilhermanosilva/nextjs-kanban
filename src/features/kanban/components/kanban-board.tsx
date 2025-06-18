@@ -19,31 +19,31 @@ type KanbanBoardProps = {
   cards: PrismaCard[];
 };
 export function KanbanBoard({ stages, cards }: KanbanBoardProps) {
- const {
-  mounted,
-  orderedStages,
-  orderedCards,
-  activeStage,
-  activeCard,
-  stagesIds,
-  currentCard,
-  openCardDialog,
-  onDragStart,
-  onDragEnd,
-  onDragOver,
-  handleOpenCardDialog,
-  handleCloseCardDialog
-} = useKanbanBoard(stages, cards)
+  const {
+    mounted,
+    orderedStages,
+    orderedCards,
+    activeStage,
+    activeCard,
+    stagesIds,
+    currentCard,
+    openCardDialog,
+    onDragStart,
+    onDragEnd,
+    onDragOver,
+    handleOpenCardDialog,
+    handleCloseCardDialog,
+  } = useKanbanBoard(stages, cards);
 
   const sensor = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 10 } }));
 
-  if (!mounted) return null
+  if (!mounted) return null;
 
   if (stages.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center gap-6">
         <span className="">Para começar, adicione uma coluna.</span>
-        <DialogAddColumn />
+        <DialogAddColumn trigger={<Button variant="outline">Adicionar coluna</Button>} />
       </div>
     );
   }
@@ -79,27 +79,26 @@ export function KanbanBoard({ stages, cards }: KanbanBoardProps) {
             );
           })}
 
-          <DialogAddColumn />
+          <DialogAddColumn trigger={<Button variant="outline">Adicionar coluna</Button>} />
         </SortableContext>
       </ul>
 
-      {mounted &&
-        createPortal(
-          <DragOverlay>
-            {activeStage && (
-              <ColumnOverlay stage={activeStage}>
-                {orderedCards
-                  .filter((card) => card.stageId === activeStage?.id)
-                  .map((card) => (
-                    <OverlayCard key={card.id} card={card} />
-                  ))}
-              </ColumnOverlay>
-            )}
+      {createPortal(
+        <DragOverlay>
+          {activeStage && (
+            <ColumnOverlay stage={activeStage}>
+              {orderedCards
+                .filter((card) => card.stageId === activeStage?.id)
+                .map((card) => (
+                  <OverlayCard key={card.id} card={card} />
+                ))}
+            </ColumnOverlay>
+          )}
 
-            {activeCard && <OverlayCard card={activeCard} />}
-          </DragOverlay>,
-          document.body,
-        )}
+          {activeCard && <OverlayCard card={activeCard} />}
+        </DragOverlay>,
+        document.body,
+      )}
 
       {currentCard?.stageId && (
         <DialogAddCard
