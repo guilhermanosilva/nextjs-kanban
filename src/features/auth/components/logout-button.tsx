@@ -1,24 +1,27 @@
 "use client";
 
-import { useTransition } from "react";
+import { useState } from "react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { logout } from "@/features/auth/actions/auth-actions";
 import { Spinner } from "@/components/spinner";
+import { useRouter } from "next/navigation";
 
 export function LogoutButton() {
-  const [isPending, startTransition] = useTransition();
+  const [isPending, setIsPending] = useState(false);
+  const router = useRouter();
 
-  const handleLogout = () => {
-    startTransition(async () => {
-      const error = await logout();
+  async function handleLogout() {
+    setIsPending(true);
+    const error = await logout();
+    setIsPending(false);
 
-      if (error) toast.error(error);
+    if (error) toast.error(error);
 
-      window.location.href = "/login";
-    });
-  };
+    router.refresh();
+    window.location.href = "/login";
+  }
 
   return (
     <Button variant="ghost" onClick={handleLogout} disabled={isPending} className="w-14">
