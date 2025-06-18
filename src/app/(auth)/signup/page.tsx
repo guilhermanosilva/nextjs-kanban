@@ -2,7 +2,6 @@ import Link from "next/link";
 import { SignupForm } from "@/features/auth/components/signup-form";
 
 export default function SignupPage() {
-  console.log("SignupPage");
   return (
     <section className="space-y-8">
       <div className="text-center">

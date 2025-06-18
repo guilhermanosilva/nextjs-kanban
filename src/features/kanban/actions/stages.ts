@@ -1,11 +1,11 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { Stage } from "@prisma/client";
 import prisma from "@/lib/prisma";
+import { Stage } from "@prisma/client";
 
-import { getUser } from "@/lib/supabase/server";
 import { ActionResponse } from "@/lib/types/action-response";
+import { getUser } from "@/lib/supabase/server";
 import { validateFormData } from "@/lib/utils";
 
 import { createStageSchema } from "@/features/kanban/schemas/create-stage";
@@ -14,14 +14,12 @@ import { type UpdateStagesOrder, updateStagesOrderSchema } from "@/features/kanb
 export async function getStagesAction(): Promise<ActionResponse<Stage[]>> {
   try {
     const { data: user, error } = await getUser();
-
     if (error || !user) {
       return { success: false, error };
     }
 
     const stages = await prisma.stage.findMany({
       where: { userId: user.id },
-      orderBy: { order: "asc" },
     });
 
     return { success: true, data: stages };

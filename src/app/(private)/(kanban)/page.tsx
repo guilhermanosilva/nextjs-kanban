@@ -1,34 +1,22 @@
 import ErrorPage from "@/app/error/page";
 
 import { getStagesAction } from "@/features/kanban/actions/stages";
-import { DialogAddColumn } from "@/features/kanban/components/dialog-add-column";
-import { Columns } from "@/features/kanban/components/columns";
+import { getCardsAction } from "@/features/kanban/actions/cards";
+import { KanbanBoard } from "@/features/kanban/components/kanban-board";
 
 export default async function KanbanPage() {
   const { data, error } = await getStagesAction();
+  const { data: cards } = await getCardsAction();
 
-  if (error || !data) {
+  if (error || !data || !cards) {
     return <ErrorPage />;
   }
 
   return (
-    <>
-      {data.length === 0 && (
-        <div className="flex flex-col items-center justify-center gap-6">
-          <span className="">Para começar, adicione uma coluna.</span>
-          <DialogAddColumn />
-        </div>
-      )}
-
-      {data.length > 0 && (
-        <div className="flex flex-1 flex-col gap-4">
-          <div className="self-start">
-            <DialogAddColumn />
-          </div>
-
-          <Columns stages={data} />
-        </div>
-      )}
-    </>
+    data.length > 0 && (
+      <div className="flex flex-1 flex-col gap-4">
+        <KanbanBoard stages={data} cards={cards} />
+      </div>
+    )
   );
 }
