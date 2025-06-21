@@ -1,5 +1,5 @@
-import { BlocksIcon } from "lucide-react";
-import { Toaster } from "sonner";
+import { BlocksIcon } from 'lucide-react'
+import { Toaster } from 'sonner'
 
 export default function AuthLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -12,5 +12,5 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
 
       <Toaster richColors theme="light" />
     </section>
-  );
+  )
 }

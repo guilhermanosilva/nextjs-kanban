@@ -1,18 +1,18 @@
-"use client";
+'use client'
 
-import { createPortal } from "react-dom";
-import { SortableContext } from "@dnd-kit/sortable";
-import { DndContext, DragOverlay, PointerSensor, useSensor, useSensors } from "@dnd-kit/core";
-import { PlusIcon } from "lucide-react";
-import { Card as PrismaCard, Stage } from "@prisma/client";
+import { createPortal } from 'react-dom'
+import { SortableContext } from '@dnd-kit/sortable'
+import { DndContext, DragOverlay, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
+import { PlusIcon } from 'lucide-react'
+import { Card as PrismaCard, Stage } from '@prisma/client'
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button'
 
-import { DialogAddColumn } from "@/features/kanban/components/dialog-add-column";
-import { DialogAddCard } from "@/features/kanban/components/dialog-add-card";
-import { Column, ColumnOverlay } from "@/features/kanban/components/column";
-import { Card, OverlayCard } from "@/features/kanban/components/card";
-import { useKanbanBoard } from "@/features/kanban/hooks/use-kanban-board";
+import { DialogAddColumn } from '@/features/kanban/components/dialog-add-column'
+import { DialogAddCard } from '@/features/kanban/components/dialog-add-card'
+import { Column, ColumnOverlay } from '@/features/kanban/components/column'
+import { Card, OverlayCard } from '@/features/kanban/components/card'
+import { useKanbanBoard } from '@/features/kanban/hooks/use-kanban-board'
 
 type KanbanBoardProps = {
   stages: Stage[];
@@ -33,11 +33,11 @@ export function KanbanBoard({ stages, cards }: KanbanBoardProps) {
     onDragOver,
     handleOpenCardDialog,
     handleCloseCardDialog,
-  } = useKanbanBoard(stages, cards);
+  } = useKanbanBoard(stages, cards)
 
-  const sensor = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 10 } }));
+  const sensor = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 10 } }))
 
-  if (!mounted) return null;
+  if (!mounted) return null
 
   if (stages.length === 0) {
     return (
@@ -45,7 +45,7 @@ export function KanbanBoard({ stages, cards }: KanbanBoardProps) {
         <span className="">Para começar, adicione uma coluna.</span>
         <DialogAddColumn trigger={<Button variant="outline">Adicionar coluna</Button>} />
       </div>
-    );
+    )
   }
 
   return (
@@ -53,8 +53,8 @@ export function KanbanBoard({ stages, cards }: KanbanBoardProps) {
       <ul className="flex flex-1 gap-4 overflow-auto rounded border p-2.5">
         <SortableContext items={stagesIds}>
           {orderedStages.map((stage) => {
-            const stageCards = orderedCards.filter((card) => card.stageId === stage.id);
-            const stageCardIds = stageCards.map((card) => card.id);
+            const stageCards = orderedCards.filter((card) => card.stageId === stage.id)
+            const stageCardIds = stageCards.map((card) => card.id)
 
             return (
               <Column key={stage.id} stage={stage} disabled={!!activeCard}>
@@ -76,7 +76,7 @@ export function KanbanBoard({ stages, cards }: KanbanBoardProps) {
                   </Button>
                 </section>
               </Column>
-            );
+            )
           })}
 
           <DialogAddColumn trigger={<Button variant="outline">Adicionar coluna</Button>} />
@@ -109,5 +109,5 @@ export function KanbanBoard({ stages, cards }: KanbanBoardProps) {
         />
       )}
     </DndContext>
-  );
+  )
 }

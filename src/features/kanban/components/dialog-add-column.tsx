@@ -1,12 +1,12 @@
-"use client";
+'use client'
 
-import { useState } from "react";
+import { useState } from 'react'
 
-import { DialogWrapper } from "@/components/dialog-wrapper";
-import { FormAddColumn } from "@/features/kanban/components/form-add-column";
+import { DialogWrapper } from '@/components/dialog-wrapper'
+import { FormAddColumn } from '@/features/kanban/components/form-add-column'
 
 export function DialogAddColumn({ trigger }: { trigger?: React.ReactNode }) {
-  const [openColumnDialog, setOpenColumnDialog] = useState(false);
+  const [openColumnDialog, setOpenColumnDialog] = useState(false)
 
   return (
     <DialogWrapper
@@ -18,5 +18,5 @@ export function DialogAddColumn({ trigger }: { trigger?: React.ReactNode }) {
     >
       <FormAddColumn />
     </DialogWrapper>
-  );
+  )
 }

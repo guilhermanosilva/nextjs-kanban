@@ -1,31 +1,31 @@
-"use server";
+'use server'
 
-import { revalidatePath } from "next/cache";
-import { Card } from "@prisma/client";
+import { revalidatePath } from 'next/cache'
+import { Card } from '@prisma/client'
 
-import { ActionResponse } from "@/lib/types/action-response";
-import { getUser } from "@/lib/supabase/server";
-import { getZodIssuesString } from "@/lib/utils";
-import prisma from "@/lib/prisma";
+import { ActionResponse } from '@/lib/types/action-response'
+import { getUser } from '@/lib/supabase/server'
+import { getZodIssuesString } from '@/lib/utils'
+import prisma from '@/lib/prisma'
 
-import { CreateCardForm, createCardSchema } from "../schemas/create-card";
+import { CreateCardForm, createCardSchema } from '../schemas/create-card'
 
 export async function getCardsAction(): Promise<ActionResponse<Card[]>> {
   try {
-    const user = await getUser();
+    const user = await getUser()
     if (!user.data || user.error) {
-      return { success: false, error: user.error };
+      return { success: false, error: user.error }
     }
 
     const cards = await prisma.card.findMany({
       where: { userId: user.data.id },
-      orderBy: { order: "asc", },
+      orderBy: { order: 'asc', },
 
-    });
+    })
 
-    return { success: true, data: cards };
+    return { success: true, data: cards }
   } catch {
-    return { success: false, error: 'Erro ao buscar "cards"' };
+    return { success: false, error: 'Erro ao buscar "cards"' }
   }
 }
 
@@ -33,24 +33,24 @@ export async function getCardsByStageAction(stageId: string): Promise<ActionResp
   try {
     const cards = await prisma.card.findMany({
       where: { stageId },
-    });
+    })
 
-    return { success: true, data: cards };
+    return { success: true, data: cards }
   } catch {
-    return { success: false, error: 'Erro ao buscar "cards"' };
+    return { success: false, error: 'Erro ao buscar "cards"' }
   }
 }
 
 export async function createCardAction(formData: CreateCardForm): Promise<ActionResponse<Card>> {
   try {
-    const user = await getUser();
+    const user = await getUser()
     if (!user.data || user.error) {
-      return { success: false, error: user.error };
+      return { success: false, error: user.error }
     }
 
-    const cardsByStage = await getCardsByStageAction(formData.stageId);
+    const cardsByStage = await getCardsByStageAction(formData.stageId)
     if (!cardsByStage.data || cardsByStage.error) {
-      return { success: false, error: cardsByStage.error };
+      return { success: false, error: cardsByStage.error }
     }
 
     const validData = createCardSchema.safeParse({
@@ -59,10 +59,10 @@ export async function createCardAction(formData: CreateCardForm): Promise<Action
       title: formData.title,
       description: formData.description,
       order: cardsByStage.data.length,
-    });
+    })
 
     if (validData.error) {
-      return { success: false, error: getZodIssuesString(validData.error.issues) };
+      return { success: false, error: getZodIssuesString(validData.error.issues) }
     }
 
     const card = await prisma.card.create({
@@ -73,21 +73,21 @@ export async function createCardAction(formData: CreateCardForm): Promise<Action
         stageId: validData.data.stageId,
         description: validData.data.description,
       },
-    });
+    })
 
-    revalidatePath("/");
+    revalidatePath('/')
 
-    return { success: true, data: card };
+    return { success: true, data: card }
   } catch {
-    return { success: false, error: 'Erro ao criar "stage"' };
+    return { success: false, error: 'Erro ao criar "stage"' }
   }
 }
 
 export async function updateCardAction(previousData: Partial<Card>, newFormData: CreateCardForm): Promise<ActionResponse<Card>> {
   try {
-    const user = await getUser();
+    const user = await getUser()
     if (!user.data || user.error) {
-      return { success: false, error: user.error };
+      return { success: false, error: user.error }
     }
 
     const validData = createCardSchema.safeParse({
@@ -96,10 +96,10 @@ export async function updateCardAction(previousData: Partial<Card>, newFormData:
       title: newFormData.title,
       description: newFormData.description,
       order: previousData.order,
-    });
+    })
 
     if (validData.error) {
-      return { success: false, error: getZodIssuesString(validData.error.issues) };
+      return { success: false, error: getZodIssuesString(validData.error.issues) }
     }
 
     const card = await prisma.card.update({
@@ -110,21 +110,21 @@ export async function updateCardAction(previousData: Partial<Card>, newFormData:
         stageId: validData.data.stageId,
         order: previousData.order,
       },
-    });
+    })
 
-    revalidatePath("/");
+    revalidatePath('/')
 
-    return { success: true, data: card };
+    return { success: true, data: card }
   } catch {
-    return { success: false, error: 'Erro ao atualizar "card"' };
+    return { success: false, error: 'Erro ao atualizar "card"' }
   }
 }
 
 export async function updateCardsOrderAction(cards: Card[]) {
   try {
-    const { data: user, error } = await getUser();
+    const { data: user, error } = await getUser()
     if (!user || error) {
-      return { success: false, error };
+      return { success: false, error }
     }
 
     const tx = cards.map((card) =>
@@ -132,14 +132,14 @@ export async function updateCardsOrderAction(cards: Card[]) {
         where: { id: card.id, userId: user.id },
         data: { order: card.order, stageId: card.stageId, updatedAt: new Date() },
       }),
-    );
+    )
 
-    const response = await prisma.$transaction(tx);
+    const response = await prisma.$transaction(tx)
 
-    revalidatePath("/");
+    revalidatePath('/')
 
-    return { success: true, data: response };
+    return { success: true, data: response }
   } catch {
-    return { success: false, error: 'Erro ao atualizar "cards"' };
+    return { success: false, error: 'Erro ao atualizar "cards"' }
   }
 }

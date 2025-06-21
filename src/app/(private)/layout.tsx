@@ -1,8 +1,8 @@
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from '@/components/theme-provider'
 
-import { ThemeButton } from "@/components/theme-button";
-import { LogoutButton } from "@/features/auth/components/logout-button";
-import { ThemeToast } from "@/components/theme-toast";
+import { ThemeButton } from '@/components/theme-button'
+import { LogoutButton } from '@/features/auth/components/logout-button'
+import { ThemeToast } from '@/components/theme-toast'
 
 export default function PrivateLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -21,5 +21,5 @@ export default function PrivateLayout({ children }: { children: React.ReactNode 
 
       <ThemeToast />
     </ThemeProvider>
-  );
+  )
 }
