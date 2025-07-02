@@ -1,6 +1,6 @@
-"use client";
+'use client'
 
-import { BugIcon } from "lucide-react";
+import { BugIcon } from 'lucide-react'
 
 export default function ErrorPage() {
   return (
@@ -8,5 +8,5 @@ export default function ErrorPage() {
       <BugIcon size={64} />
       <span className="text-xl">Ocorreu um erro inesperado</span>
     </div>
-  );
+  )
 }

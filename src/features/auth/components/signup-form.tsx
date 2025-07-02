@@ -1,36 +1,36 @@
-"use client";
+'use client'
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { toast } from 'sonner'
 
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
+import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 
-import { signup } from "@/features/auth/actions/auth-actions";
-import { type SignupForm as SignupFormType, signupSchema } from "@/features/auth/schemas/signup-schema";
-import { authMessages } from "@/lib/constants/auth-messages";
+import { signup } from '@/features/auth/actions/auth-actions'
+import { type SignupForm as SignupFormType, signupSchema } from '@/features/auth/schemas/signup-schema'
+import { authMessages } from '@/lib/constants/auth-messages'
 
 export function SignupForm() {
   const form = useForm<SignupFormType>({
     resolver: zodResolver(signupSchema),
-    defaultValues: { email: "", password: "" },
-  });
+    defaultValues: { email: '', password: '' },
+  })
 
   async function onSubmit(data: SignupFormType) {
-    const errorCode = await signup(data);
+    const errorCode = await signup(data)
 
     if (errorCode) {
-      const message = authMessages[errorCode] || "Ocorreu um erro inesperado, por favor tente novamente.";
-      toast.error(message);
-      return;
+      const message = authMessages[errorCode] || 'Ocorreu um erro inesperado, por favor tente novamente.'
+      toast.error(message)
+      return
     }
 
-    toast.success("Cadastrado com sucesso.", {
+    toast.success('Cadastrado com sucesso.', {
       duration: 10000,
-      description: "Clique no link enviado para seu e-mail para confirmar o cadastro.",
-    });
+      description: 'Clique no link enviado para seu e-mail para confirmar o cadastro.',
+    })
   }
 
   return (
@@ -65,9 +65,9 @@ export function SignupForm() {
         />
 
         <Button className="w-full mt-6" size="lg" disabled={form.formState.isSubmitting}>
-          {form.formState.isSubmitting ? "Cadastrando..." : "Cadastrar"}
+          {form.formState.isSubmitting ? 'Cadastrando...' : 'Cadastrar'}
         </Button>
       </form>
     </Form>
-  );
+  )
 }

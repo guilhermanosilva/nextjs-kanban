@@ -1,7 +1,7 @@
-import { Card } from "@prisma/client";
+import { Card } from '@prisma/client'
 
-import { DialogWrapper } from "@/components/dialog-wrapper";
-import { FormAddCard } from "@/features/kanban/components/form-add-card";
+import { DialogWrapper } from '@/components/dialog-wrapper'
+import { FormAddCard } from '@/features/kanban/components/form-add-card'
 
 type DialogAddCardProps = {
   initialData: Partial<Card> | null;
@@ -20,5 +20,5 @@ export function DialogAddCard({ initialData, open, onOpenChange, onSuccess }: Di
     >
       <FormAddCard initialData={initialData} onSuccess={onSuccess} />
     </DialogWrapper>
-  );
+  )
 }

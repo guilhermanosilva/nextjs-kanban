@@ -1,4 +1,4 @@
-import { PropsWithChildren, ReactNode } from "react";
+import { PropsWithChildren, ReactNode } from 'react'
 
 import {
   Dialog,
@@ -7,7 +7,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog'
 
 type DialogWrapperProps = PropsWithChildren<{
   title: string;
@@ -31,5 +31,5 @@ export function DialogWrapper({ children, title, description, open, onOpenChange
         {children}
       </DialogContent>
     </Dialog>
-  );
+  )
 }

@@ -1,5 +1,5 @@
-import Link from "next/link";
-import { LoginForm } from "@/features/auth/components/login-form";
+import Link from 'next/link'
+import { LoginForm } from '@/features/auth/components/login-form'
 
 export default function LoginPage() {
   return (
@@ -15,5 +15,5 @@ export default function LoginPage() {
         Não tem uma conta? Cadastre-se
       </Link>
     </section>
-  );
+  )
 }

@@ -15,7 +15,7 @@ model Stage {
   userId    String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  Card      Card[]
+  card      Card[]
 
   @@map("stages")
 }
@@ -27,7 +27,7 @@ model Label {
   userId    String
   createdAt DateTime    @default(now())
   updatedAt DateTime    @updatedAt
-  CardLabel CardLabel[]
+  cardLabel CardLabel[]
 
   @@map("labels")
 }
@@ -56,7 +56,7 @@ model Card {
 
   stage Stage @relation(fields: [stageId], references: [id], onDelete: Cascade)
 
-  labels CardLabel[]
+  cardLabel CardLabel[]
 
   @@map("cards")
 }
