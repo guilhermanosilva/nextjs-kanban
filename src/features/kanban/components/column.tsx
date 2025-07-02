@@ -1,11 +1,10 @@
 'use client'
 
 import { PropsWithChildren } from 'react'
+import { Stage } from '@prisma/client'
+import { cn } from '@/lib/utils'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-
-import { cn } from '@/lib/utils'
-import { Stage } from '@prisma/client'
 
 type ColumnProps = {
   stage: Stage;
@@ -34,15 +33,16 @@ export function Column({ stage, className, children, disabled }: ColumnProps) {
       {...attributes}
       {...listeners}
       style={style}
-      className={cn('bg-accent max-w-3xs min-w-3xs flex-1 rounded border flex flex-col', className, {
+      className={cn('bg-background max-w-3xs min-w-3xs rounded-lg border flex flex-col h-fit', {
         'animate-pulse opacity-70 ring-1': isDragging,
+        className
       })}
     >
-      <header className="p-3">
+      <header className="px-4 pt-3 pb-0 text-sm text-foreground/80 font-semibold">
         <span>{stage.name}</span>
       </header>
 
-      <div className="flex flex-1 flex-col gap-2 p-2">{children}</div>
+      <div className="flex flex-col gap-2.5 p-2.5">{children}</div>
     </li>
   )
 }

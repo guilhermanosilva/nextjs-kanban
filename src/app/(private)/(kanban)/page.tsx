@@ -3,6 +3,7 @@ import ErrorPage from '@/app/error/page'
 import { getStagesAction } from '@/features/kanban/actions/stages'
 import { getCardsAction } from '@/features/kanban/actions/cards'
 import { KanbanBoard } from '@/features/kanban/components/kanban-board'
+import { ConfigurationMenu } from '@/features/configuration/components/menu'
 
 export default async function KanbanPage() {
   const { data, error } = await getStagesAction()
@@ -13,8 +14,11 @@ export default async function KanbanPage() {
   }
 
   return (
-    <div className="flex flex-1 flex-col gap-4">
+    <>
+      <header className="bg-background p-2.5 flex items-center justify-end shadown">
+        <ConfigurationMenu />
+      </header>
       <KanbanBoard stages={data} cards={cards} />
-    </div>
+    </>
   )
 }
