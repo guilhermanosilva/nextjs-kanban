@@ -8,9 +8,10 @@ import { getUser } from '@/lib/supabase/server'
 import { getZodIssuesString } from '@/lib/utils'
 import prisma from '@/lib/prisma'
 
-import { CreateCardForm, createCardSchema } from '../schemas/create-card'
+import { type CreateCardForm, createCardSchema } from '@/features/kanban/schemas/create-card'
+import { type CardWithLabels, includeFields } from '@/features/kanban/schemas/get-card'
 
-export async function getCardsAction(): Promise<ActionResponse<Card[]>> {
+export async function getCardsAction(): Promise<ActionResponse<CardWithLabels[]>> {
   try {
     const user = await getUser()
     if (!user.data || user.error) {
@@ -19,8 +20,8 @@ export async function getCardsAction(): Promise<ActionResponse<Card[]>> {
 
     const cards = await prisma.card.findMany({
       where: { userId: user.data.id },
+      include: includeFields,
       orderBy: { order: 'asc', },
-
     })
 
     return { success: true, data: cards }
@@ -43,9 +44,9 @@ export async function getCardsByStageAction(stageId: string): Promise<ActionResp
 
 export async function createCardAction(formData: CreateCardForm): Promise<ActionResponse<Card>> {
   try {
-    const user = await getUser()
-    if (!user.data || user.error) {
-      return { success: false, error: user.error }
+    const { data: user, error } = await getUser()
+    if (!user || error) {
+      return { success: false, error }
     }
 
     const cardsByStage = await getCardsByStageAction(formData.stageId)
@@ -54,25 +55,37 @@ export async function createCardAction(formData: CreateCardForm): Promise<Action
     }
 
     const validData = createCardSchema.safeParse({
-      userId: user.data.id,
+      userId: user.id,
       stageId: formData.stageId,
       title: formData.title,
       description: formData.description,
       order: cardsByStage.data.length,
+      cardLabel: formData.cardLabel,
     })
 
     if (validData.error) {
       return { success: false, error: getZodIssuesString(validData.error.issues) }
     }
 
-    const card = await prisma.card.create({
-      data: {
-        userId: user.data.id,
-        order: cardsByStage.data.length,
-        title: validData.data.title,
-        stageId: validData.data.stageId,
-        description: validData.data.description,
-      },
+    const card = await prisma.$transaction(async (tx) => {
+      const card = await tx.card.create({
+        data: {
+          userId: user.id,
+          order: cardsByStage.data?.length,
+          title: validData.data.title,
+          stageId: validData.data.stageId,
+          description: validData.data.description,
+        },
+      })
+
+      await tx.cardLabel.createMany({
+        data: validData.data.cardLabel.map((label) => ({
+          labelId: label.labelId!,
+          cardId: card.id,
+        })),
+      })
+
+      return card
     })
 
     revalidatePath('/')
@@ -96,20 +109,38 @@ export async function updateCardAction(previousData: Partial<Card>, newFormData:
       title: newFormData.title,
       description: newFormData.description,
       order: previousData.order,
+      cardLabel: newFormData.cardLabel,
     })
 
     if (validData.error) {
       return { success: false, error: getZodIssuesString(validData.error.issues) }
     }
 
-    const card = await prisma.card.update({
-      where: { id: previousData.id },
-      data: {
-        title: validData.data.title,
-        description: validData.data.description,
-        stageId: validData.data.stageId,
-        order: previousData.order,
-      },
+    const card = await prisma.$transaction(async (tx) => {
+      const card = await tx.card.update({
+        where: { id: previousData.id },
+        data: {
+          title: validData.data.title,
+          description: validData.data.description,
+          stageId: validData.data.stageId,
+          order: previousData.order,
+        },
+      })
+
+      await tx.cardLabel.deleteMany({
+        where: { cardId: card.id },
+      })
+
+      if (validData.data.cardLabel?.length > 0) {
+        await tx.cardLabel.createMany({
+          data: validData.data.cardLabel.map((label) => ({
+            labelId: label.labelId!,
+            cardId: card.id,
+          })),
+        })
+      }
+
+      return card
     })
 
     revalidatePath('/')

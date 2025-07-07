@@ -6,12 +6,16 @@ export const createCardSchema = z.object({
   title: z.string().min(1, 'Informe o título da tarefa').max(50, 'Informe no máx. 50 caracteres'),
   description: z.string().nullable(),
   order: z.coerce.number().int().nonnegative({ message: 'Números negativos não são permitidos' }),
+  cardLabel: z.array(z.object({
+    labelId: z.string().optional(),
+  }))
 })
 
 export const createCardFormSchema = createCardSchema.pick({
   title: true,
   description: true,
   stageId: true,
+  cardLabel: true,
 })
 
 
