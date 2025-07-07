@@ -8,6 +8,17 @@ Este é um projeto de **Quadro Kanban multiusuário**, desenvolvido com tecnolog
 _{ **Email:** guilhermanodev@gmail.com |
 **Senha:** 123456 }_
 
+## 📸 Screenshots
+
+#### 🔹 Quadro Kanban (Board)
+<img src="public/board.png" alt="Board" width="700" />
+
+#### 🔹 Modal para adicionar novo card
+<img src="public/modal_adicionar_card.png" alt="Modal Adicionar Card" width="700" />
+
+#### 🔹 Gerenciamento de etiquetas
+<img src="public/gerenciamento_de_labels.png" alt="Gerenciamento de Labels" width="700" />
+
 ## 🛠️ Tecnologias Utilizadas
 
 - **Next.js 15 (App Router)**
@@ -44,22 +55,14 @@ src/
 ├─ prisma/                  # Schemas e migrações do banco
 ```
 
-## 📸 Screenshots
-
-#### 🔹 Quadro Kanban (Board)
-<img src="public/board.png" alt="Board" width="700" />
-
-#### 🔹 Modal para adicionar novo card
-<img src="public/modal_adicionar_card.png" alt="Modal Adicionar Card" width="700" />
-
-#### 🔹 Gerenciamento de etiquetas
-<img src="public/gerenciamento_de_labels.png" alt="Gerenciamento de Labels" width="700" />
-
 ## Proximos passos
 
-> ⬜ Estado global com zustand\
-> ⬜ Performance para grandes massas de dados no board\
-> ⬜ Testes
+> ⬜ Criar uma camada de serviços para fazer as requisições ao banco de dados (fora das actions)\
+> ⬜ Criar um utilitário para abastrair as validações de usuário e dos schemas do zod para cada action (evita repetição de código)\
+> ⬜ Exibir os labels do card na lista de cards em cada coluna\
+> ⬜ Utilizar estado global com zustand\
+> ⬜ Melhorar a performance para grandes massas de dados no board\
+> ⬜ Criar testes de unidade e integração
 
 ## 👨‍💻 Autor
 
